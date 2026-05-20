@@ -1,27 +1,40 @@
 using UnityEngine;
-using UnityEngine.InputAction;
+using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    private float moveSpeed = 5f; 
-    private Rigidbody2D rb; 
-    private vector2 moveInput; 
-
+    [SerializeField] private float moveSpeed = 5f; 
+    private Rigidbody2D rb;     
+    private Vector2 moveInput; 
+    private Animator animator;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Start()    
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>(); 
     }
 
     // Update is called once per frame
     void Update()
     {
-        rb.velocity = moveInput * moveSpeed;
+        rb.linearVelocity = moveInput * moveSpeed;
     }
-    
+
     public void Move(InputAction.CallbackContext context)
 
     {
-        moveInput = context.ReadValue<vector2>(); 
+        animator.SetBool("isWalking", true);
+
+        if(context.canceled)
+        {
+            animator.SetBool("isWalking", false); 
+            animator.SetFloat("lastinputx", moveInput.x);
+            animator.SetFloat("lastinputy", moveInput.y);
+        
+        }
+        
+        moveInput = context.ReadValue<Vector2>(); 
+        animator.SetFloat("inputx", moveInput.x);
+        animator.SetFloat("inputy", moveInput.y);
     }
 }
