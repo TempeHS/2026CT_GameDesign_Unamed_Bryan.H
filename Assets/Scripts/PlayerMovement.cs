@@ -32,12 +32,15 @@ public class PlayerMovement : MonoBehaviour
 
             if(context.canceled)
             {
-                animator.SetBool("isWalking", false); 
+                animator.SetBool("isWalking", false);
                 animator.SetFloat("lastinputx", moveInput.x);
                 animator.SetFloat("lastinputy", moveInput.y);
             
             }
             
+            ///// pls dont edit i think this is good for idles 
+            
+
             moveInput = context.ReadValue<Vector2>(); 
             animator.SetFloat("inputx", moveInput.x);
             animator.SetFloat("inputy", moveInput.y);
