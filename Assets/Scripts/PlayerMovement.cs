@@ -72,7 +72,7 @@ public class PlayerMovement : MonoBehaviour
         bool dashPressed = Input.GetButtonDown("Fire3");
         bool slidePressed = Input.GetButtonDown("Fire1") || Input.GetKeyDown(KeyCode.S);
 
-        // Ground check moved to Update but stable because wall slide no longer overrides it
+      
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
         if (isGrounded)
@@ -121,7 +121,7 @@ public class PlayerMovement : MonoBehaviour
             StartCoroutine(SlideCoroutine());
         }
 
-        // FIXED WALL SLIDE — no longer overrides grounded state
+        
         if (enableWallSlide && !isGrounded && !isDashing)
         {
             bool touchingWall = Physics2D.Raycast(
