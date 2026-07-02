@@ -6,9 +6,10 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
     public float moveSpeed = 10f;
-    public float acceleration = 40f;
-    public float deceleration = 50f;
-    public float airControlMultiplier = 0.6f;
+    public float csgoMaxSpeed = 14f;
+    public float csgoGroundAccel = 120f;
+    public float csgoAirAccel = 80f;
+    public float csgoFriction = 8f;
 
     [Header("Jump")]
     public float jumpForce = 18f;
@@ -72,7 +73,6 @@ public class PlayerMovement : MonoBehaviour
         bool dashPressed = Input.GetButtonDown("Fire3");
         bool slidePressed = Input.GetButtonDown("Fire1") || Input.GetKeyDown(KeyCode.S);
 
-        // Ground check moved to Update but stable because wall slide no longer overrides it
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
         if (isGrounded)
@@ -121,7 +121,6 @@ public class PlayerMovement : MonoBehaviour
             StartCoroutine(SlideCoroutine());
         }
 
-        // FIXED WALL SLIDE — no longer overrides grounded state
         if (enableWallSlide && !isGrounded && !isDashing)
         {
             bool touchingWall = Physics2D.Raycast(
@@ -150,19 +149,61 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+
     void FixedUpdate()
     {
         if (isDashing || isSliding || isWallSliding) return;
 
-        float targetSpeed = moveInput * moveSpeed;
-        float speedDiff = targetSpeed - rb.linearVelocity.x;
-
-        float accelRate = Mathf.Abs(targetSpeed) > 0.01f ? acceleration : deceleration;
-        if (!isGrounded) accelRate *= airControlMultiplier;
-
-        float movement = accelRate * speedDiff;
-        rb.AddForce(new Vector2(movement, 0f));
+        if (isGrounded)
+        {
+            ApplyGroundFriction();
+            CSGOAccelerate(moveInput, csgoMaxSpeed, csgoGroundAccel);
+        }
+        else
+        {
+            CSGOAirAccelerate(moveInput, csgoMaxSpeed, csgoAirAccel);
+        }
     }
+
+    void CSGOAccelerate(float wishDir, float wishSpeed, float accel)
+    {
+        float currentSpeed = rb.linearVelocity.x * wishDir;
+        float addSpeed = wishSpeed - currentSpeed;
+
+        if (addSpeed <= 0) return;
+
+        float accelSpeed = accel * Time.fixedDeltaTime * wishSpeed;
+        if (accelSpeed > addSpeed)
+            accelSpeed = addSpeed;
+
+        rb.linearVelocity += new Vector2(accelSpeed * wishDir, 0);
+    }
+
+    void CSGOAirAccelerate(float wishDir, float wishSpeed, float accel)
+    {
+        float currentSpeed = rb.linearVelocity.x * wishDir;
+        float addSpeed = wishSpeed - currentSpeed;
+
+        if (addSpeed <= 0) return;
+
+        float accelSpeed = accel * Time.fixedDeltaTime * wishSpeed;
+        if (accelSpeed > addSpeed)
+            accelSpeed = addSpeed;
+
+        rb.linearVelocity += new Vector2(accelSpeed * wishDir, 0);
+    }
+
+    void ApplyGroundFriction()
+    {
+        float speed = Mathf.Abs(rb.linearVelocity.x);
+        if (speed < 0.1f) return;
+
+        float drop = speed * csgoFriction * Time.fixedDeltaTime;
+        float newSpeed = Mathf.Max(speed - drop, 0);
+
+        rb.linearVelocity = new Vector2(newSpeed * Mathf.Sign(rb.linearVelocity.x), rb.linearVelocity.y);
+    }
+
 
     void Jump()
     {
