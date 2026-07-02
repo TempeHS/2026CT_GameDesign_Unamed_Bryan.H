@@ -153,21 +153,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86e85f40e1a64eb43bf7cf90390e7388, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 20
+  moveSpeed: 15
   csgoMaxSpeed: 14
   csgoGroundAccel: 120
   csgoAirAccel: 80
   csgoFriction: 8
-  jumpForce: 55
+  jumpForce: 35
   coyoteTime: 0.1
   jumpBufferTime: 0.5
   jumpCutMultiplier: 0.5
   maxAirJumps: 5
-  dashSpeed: 33
+  dashSpeed: 18
   dashDuration: 0.15
   dashCooldown: 0.3
   maxAirDashes: 1
-  slideSpeed: 45
+  slideSpeed: 20
   slideDuration: 0.4
   slideFriction: 0.4
   enableWallSlide: 1

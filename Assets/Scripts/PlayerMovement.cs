@@ -149,7 +149,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-
+//code below can be subject to change make sure not to screw up parts above. 
     void FixedUpdate()
     {
         if (isDashing || isSliding || isWallSliding) return;
