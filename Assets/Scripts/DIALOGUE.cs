@@ -16,6 +16,7 @@ public class NewMonoBehaviourScript : MonoBehaviour
     void Start()
     {
         StartDialogue();
+        Debug.Log("TMP assigned? " + (textComponent != null));
     }
 
     void Update()
@@ -24,18 +25,15 @@ public class NewMonoBehaviourScript : MonoBehaviour
         {
             if (isTyping)
             {
-                
                 StopAllCoroutines();
                 textComponent.text = lines[index];
                 isTyping = false;
             }
             else
             {
-                
                 NextLine();
 
-                
-                if (index >= lines.Length - 1   )
+                if (index >= lines.Length - 1)
                 {
                     Debug.Log("Unfreezing player: dialogue finished");
                     playerMovement.isFrozen = false;
@@ -50,7 +48,6 @@ public class NewMonoBehaviourScript : MonoBehaviour
         textComponent.text = string.Empty;
         StartCoroutine(TypeLine());
 
-        
         Debug.Log("Freezing player: dialogue started");
         playerMovement.isFrozen = true;
     }
@@ -62,6 +59,9 @@ public class NewMonoBehaviourScript : MonoBehaviour
 
         foreach (char c in lines[index].ToCharArray())
         {
+            if (!textComponent.gameObject.activeInHierarchy)
+                yield break;
+
             textComponent.text += c;
             yield return new WaitForSeconds(textSpeed);
         }
@@ -78,12 +78,16 @@ public class NewMonoBehaviourScript : MonoBehaviour
         }
         else
         {
-            
-            dialogueBox.SetActive(false);
+            StartCoroutine(SafeDisable(dialogueBox));
         }
     }
 
- 
+    IEnumerator SafeDisable(GameObject obj)
+    {
+        yield return new WaitForEndOfFrame();
+        obj.SetActive(false);
+    }
+
     public void FreezeForSeconds(float seconds)
     {
         StartCoroutine(FreezeTimer(seconds));

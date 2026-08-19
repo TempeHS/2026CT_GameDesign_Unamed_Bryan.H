@@ -1,2 +1,13 @@
 fileFormatVersion: 2
 guid: 86e85f40e1a64eb43bf7cf90390e7388
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - groundCheck: {fileID: 8891936389353674217, guid: 4c7d9a7ebaa1d8d459c812e9bcc4f79e, type: 3}
+  - wallCheck: {fileID: 257508851523766283, guid: 0d696df10a1b0ea42b996fe7cf91c78d, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,2 +1,14 @@
 fileFormatVersion: 2
 guid: e851cd5a4c5f880409f44c8fbb9f08fb
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - teleportPoint: {instanceID: 0}
+  - fader: {instanceID: 0}
+  - messageUI: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

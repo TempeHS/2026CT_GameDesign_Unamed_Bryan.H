@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
 
+
+
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
@@ -69,14 +71,15 @@ public class PlayerMovement : MonoBehaviour
     private bool dashPressed;
     private bool slidePressed;
 
-    
+    private SpriteRenderer spriteRenderer;
     private Animator anim;
 
     void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
-        anim = GetComponentInChildren<Animator>();   // auto‑find animator
+    rb = GetComponent<Rigidbody2D>();
+    spriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
+
 
     void Update()
     {
@@ -308,4 +311,6 @@ public class PlayerMovement : MonoBehaviour
         anim.SetFloat("Speed", Mathf.Abs(rb.linearVelocity.x));
         anim.SetFloat("VerticalSpeed", rb.linearVelocity.y);
     }
+ 
+  
 }
